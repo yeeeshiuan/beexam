@@ -4,3 +4,4 @@ __pycache__
 *.pyc
 .my_pgpass
 .pg_service.conf
+.env

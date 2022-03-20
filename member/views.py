@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.views import exception_handler
 from member.serializers import UserSerializer
-from member.forms import UserForm
 
 GUEST_SAFE_METHODS = ('GET', 'POST', 'HEAD', 'OPTIONS')
 

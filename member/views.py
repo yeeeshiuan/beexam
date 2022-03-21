@@ -1,17 +1,27 @@
 from django.contrib.auth.models import User, Group
 from django.shortcuts import render
+from django.core.mail import send_mail
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.views import exception_handler
+from smtplib import SMTPException
+from beexam.settings import env
 from member.serializers import UserSerializer
+import traceback
+import sys
 
 GUEST_SAFE_METHODS = ('GET', 'POST', 'HEAD', 'OPTIONS')
+
 
 class GuestUserPermission(BasePermission):
     def has_permission(self, request, view):
         return request.method in GUEST_SAFE_METHODS
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -24,6 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
     # [POST] api/users/
     def create(self, request, **kwargs):
         username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
         password_check = request.data.get('password_check')
 
@@ -34,9 +45,39 @@ class UserViewSet(viewsets.ModelViewSet):
         elif password and password_check and password != password_check:
             return Response({'error': 'The two password fields didn’t match.'})
 
-        user = User.objects.create(username=username, is_active=False)
-        user.set_password(password)
-        user.save()
+        if not email:
+            return Response({'error': 'lack of the parameters(email)'})
+
+        if not username:
+            return Response({'error': 'lack of the parameters(username)'})
+
+        try:
+            validate_email(email)
+
+            user = User.objects.create(username=username, email=email, is_active=False)
+            user.set_password(password)
+            user.save()
+
+            send_mail(
+                'Subject here',
+                'Here is the message.',
+                env('EMAIL_HOST_USER'),
+                [email],
+                fail_silently=False,
+                auth_user=None,
+                auth_password=None,
+                connection=None,
+                html_message='<p>This is html message.</p><br /><b>bold</b>'
+            )
+        except ValidationError as e:
+            exc_info = sys.exc_info()
+            return Response({'error': ''.join(traceback.format_exception(*exc_info))})
+        except IntegrityError as e:
+            exc_info = sys.exc_info()
+            return Response({'error': ''.join(traceback.format_exception(*exc_info))})
+        except SMTPException as e:
+            exc_info = sys.exc_info()
+            return Response({'error': ''.join(traceback.format_exception(*exc_info))})
 
         serializer = UserSerializer(user)
 

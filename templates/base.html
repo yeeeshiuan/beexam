@@ -63,7 +63,7 @@
                             <a class="nav-link" href="#">Dashboard</a>
                         {% else %}
                             <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#signupModal">
-                                Sign Up
+                                Sign up
                             </a>
                             <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">
                                 Login
@@ -80,30 +80,32 @@
                 <div class="modal-dialog modal-dialog-scrollable" role="document">
                     <div class="modal-content rounded-5 shadow">
                         <div class="modal-header p-5 pb-4 border-bottom-0">
-                            <!-- <h5 class="modal-title">Modal title</h5> -->
-                            <h2 class="fw-bold mb-0">Sign up for free</h2>
+                            <h2 class="fw-bold mb-0 text-secondary">Sign up</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div class="modal-body p-5 pt-0">
                             <form  onsubmit="post_signup(event)" id="signup-form">
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control rounded-4" id="email" placeholder="name@example.com">
-                                    <label for="floatingInput">Email address</label>
+                                    <input type="email" class="form-control rounded-4 text-dark"
+                                           id="email" placeholder="name@example.com">
+                                    <label for="floatingInput" class="text-muted">Email address</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control rounded-4" id="password" placeholder="Password">
-                                    <label for="floatingPassword">Password</label>
+                                    <input type="password" class="form-control rounded-4 text-dark"
+                                           id="password" placeholder="Password">
+                                    <label for="floatingPassword" class="text-muted">Password</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control rounded-4" id="password_check" placeholder="Password again">
-                                    <label for="floatingPassword">Password again</label>
+                                    <input type="password" class="form-control rounded-4 text-dark"
+                                           id="password_check" placeholder="Password again">
+                                    <label for="floatingPassword" class="text-muted">Password again</label>
                                 </div>
                                 <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign up</button>
                                 <input type="hidden" id="post-user-url" data-url="{% url "user-list" %}" />
                                 <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
                                 <hr class="my-4">
-                                <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+                                <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>
                                 <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"/></svg>
                                     Sign up with Twitter
@@ -126,36 +128,37 @@
                 <div class="modal-dialog modal-dialog-scrollable" role="document">
                     <div class="modal-content rounded-5 shadow">
                         <div class="modal-header p-5 pb-4 border-bottom-0">
-                            <!-- <h5 class="modal-title">Modal title</h5> -->
-                            <h2 class="fw-bold mb-0">Sign up for free</h2>
+                            <h2 class="fw-bold mb-0 text-secondary">Login</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <div class="modal-body p-5 pt-0">
                             <form class="">
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control rounded-4" id="floatingInput" placeholder="name@example.com">
-                                    <label for="floatingInput">Email address</label>
+                                    <input type="email" class="form-control rounded-4 text-dark"
+                                           id="email" placeholder="name@example.com">
+                                    <label for="floatingInput" class="text-muted">Email address</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Password">
-                                    <label for="floatingPassword">Password</label>
+                                    <input type="password" class="form-control rounded-4 text-dark"
+                                           id="password" placeholder="Password">
+                                    <label for="floatingPassword" class="text-muted">Password</label>
                                 </div>
-                                <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign up</button>
-                                <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+                                <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Login</button>
+                                <small class="text-muted">By clicking Login, you agree to the terms of use.</small>
                                 <hr class="my-4">
-                                <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
+                                <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>
                                 <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"/></svg>
-                                    Sign up with Twitter
+                                    Login with Twitter
                                 </button>
                                 <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
-                                    Sign up with Facebook
+                                    Login with Facebook
                                 </button>
                                 <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4" type="submit">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#github"/></svg>
-                                    Sign up with GitHub
+                                    Login with GitHub
                                 </button>
                             </form>
                         </div>

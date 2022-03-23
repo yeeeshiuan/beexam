@@ -73,6 +73,9 @@
                 </div>
             </header>
 
+            <div id="success-alert" class="alert alert-success" role="alert" style="display: none;"></div>
+            <div id="danger-alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+
             {% block content %} 
             {% endblock content %} 
 
@@ -84,6 +87,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
+                        <div id="signup-danger-alert" class="alert alert-danger" role="alert" style="display: none;"></div>
                         <div class="modal-body p-5 pt-0">
                             <form  onsubmit="post_signup(event)" id="signup-form">
                                 <div class="form-floating mb-3">

@@ -4,13 +4,14 @@ from django.db import IntegrityError, transaction
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError as RestValidationError
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.views import exception_handler
 from traceback import format_exception
 from smtplib import SMTPException
 import sys
 from beexam.settings import env
-from member.serializers import UserSerializer
+from member.serializers import UserSerializer, FormUserSerializer
 from member.models import User
 
 GUEST_SAFE_METHODS = ('GET', 'POST', 'HEAD', 'OPTIONS')
@@ -36,17 +37,10 @@ class UserViewSet(viewsets.ModelViewSet):
         password = request.data.get('password')
         password_check = request.data.get('password_check')
 
-        if not password:
-            return Response({'error': 'lack of the parameters(password)'})
-        elif not password_check:
-            return Response({'error': 'lack of the parameters(password_check)'})
-        elif password and password_check and password != password_check:
-            return Response({'error': 'The two password fields did not match.'})
-
-        if not email:
-            return Response({'error': 'lack of the parameters(email)'})
-
         try:
+            formUserSerializer = FormUserSerializer()
+            formUserSerializer.validate(request.data);
+
             with transaction.atomic():
                 user = User.objects.create(email=email, is_active=False)
                 user.set_password(password)
@@ -66,14 +60,21 @@ class UserViewSet(viewsets.ModelViewSet):
                     html_message='<p>This is html message.</p><br /><b>bold</b>'
                 )
         except ValidationError as e:
-            exc_info = sys.exc_info()
-            return Response({'error': ''.join(format_exception(*exc_info))})
+            return Response({'error': str(e), 'type':'ValidationError'})
+            #exc_info = sys.exc_info()
+            #return Response({'error': ''.join(format_exception(*exc_info))})
         except IntegrityError as e:
-            exc_info = sys.exc_info()
-            return Response({'error': ''.join(format_exception(*exc_info))})
+            return Response({'error': str(e), 'type':'IntegrityError'})
+            #exc_info = sys.exc_info()
+            #return Response({'error': ''.join(format_exception(*exc_info))})
         except SMTPException as e:
-            exc_info = sys.exc_info()
-            return Response({'error': ''.join(format_exception(*exc_info))})
+            return Response({'error': str(e), 'type':'SMTPException'})
+            #exc_info = sys.exc_info()
+            #return Response({'error': ''.join(format_exception(*exc_info))})
+        except RestValidationError as e:
+            return Response({'error': str(e), 'type':'RestValidationError'})
+        except Exception as e:
+            return Response({'error': str(e), 'type':'There has been a unknown error in the database'})
 
         serializer = UserSerializer(user)
 

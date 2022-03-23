@@ -79,8 +79,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email_validator = EmailValidator()
 
     email = models.EmailField(
-            unique=True,
+            _("email"),
             max_length=255,
+            unique=True,
             blank=False,
             validators=[email_validator],
             error_messages={

@@ -1,4 +1,3 @@
-from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import IntegrityError, transaction
@@ -50,8 +49,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
         try:
             with transaction.atomic():
-                validate_email(email)
-
                 user = User.objects.create(email=email, is_active=False)
                 user.set_password(password)
                 if username:

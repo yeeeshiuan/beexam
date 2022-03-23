@@ -1,5 +1,6 @@
 from django.db import models
 from django.apps import apps
+from django.core.validators import EmailValidator
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.hashers import make_password
@@ -75,7 +76,17 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(unique=True, max_length=255, blank=False)
+    email_validator = EmailValidator()
+
+    email = models.EmailField(
+            unique=True,
+            max_length=255,
+            blank=False,
+            validators=[email_validator],
+            error_messages={
+                "unique": _("A user with that email already exists."),
+            },
+    )
 
     username = models.CharField( _("username"), max_length=150, blank=True)
     first_name = models.CharField( _("first name"), max_length=150, blank=True)

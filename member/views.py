@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import IntegrityError, transaction
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -79,7 +78,3 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(user)
 
         return Response(serializer.data)
-
-
-def signup(request):
-    return render(request, 'member/signup.html')

@@ -2,7 +2,7 @@
 function post_signup(e){
     e.preventDefault();
     const form = $('#signup-form')[0];
-    const username = form.elements.username.value;
+    const email = form.elements.email.value;
     const password = form.elements.password.value;
     const password_check = form.elements.password_check.value;
     const postUrl = $('#post-user-url').attr("data-url");
@@ -10,7 +10,7 @@ function post_signup(e){
         type:'POST',
         url:postUrl,
         data:{
-            username:username,
+            email:email,
             password:password,
             password_check:password_check,
         },
@@ -18,7 +18,7 @@ function post_signup(e){
             console.log(json);
         },
         error : function(xhr,errmsg,err) {
-            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            console.log(xhr.status + ": " + xhr.responseText);
         }
     });
 }

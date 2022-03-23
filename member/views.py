@@ -1,19 +1,19 @@
-from django.contrib.auth.models import User, Group
-from django.shortcuts import render
-from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db import IntegrityError, transaction
+from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.views import exception_handler
+from traceback import format_exception
 from smtplib import SMTPException
+import sys
 from beexam.settings import env
 from member.serializers import UserSerializer
-from traceback import format_exception
-from sys import exc_info
+from member.models import User
 
 GUEST_SAFE_METHODS = ('GET', 'POST', 'HEAD', 'OPTIONS')
 
@@ -48,15 +48,14 @@ class UserViewSet(viewsets.ModelViewSet):
         if not email:
             return Response({'error': 'lack of the parameters(email)'})
 
-        if not username:
-            return Response({'error': 'lack of the parameters(username)'})
-
         try:
             with transaction.atomic():
                 validate_email(email)
 
-                user = User.objects.create(username=username, email=email, is_active=False)
+                user = User.objects.create(email=email, is_active=False)
                 user.set_password(password)
+                if username:
+                    user.username = username
                 user.save()
 
                 send_mail(
@@ -71,13 +70,13 @@ class UserViewSet(viewsets.ModelViewSet):
                     html_message='<p>This is html message.</p><br /><b>bold</b>'
                 )
         except ValidationError as e:
-            exc_info = exc_info()
+            exc_info = sys.exc_info()
             return Response({'error': ''.join(format_exception(*exc_info))})
         except IntegrityError as e:
-            exc_info = exc_info()
+            exc_info = sys.exc_info()
             return Response({'error': ''.join(format_exception(*exc_info))})
         except SMTPException as e:
-            exc_info = exc_info()
+            exc_info = sys.exc_info()
             return Response({'error': ''.join(format_exception(*exc_info))})
 
         serializer = UserSerializer(user)
@@ -86,4 +85,4 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    return render(request, 'member/signup.html')

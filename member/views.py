@@ -33,7 +33,6 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request, **kwargs):
         formUser = UserForm(request.data)
 
-        print(request.data)
         if formUser.is_valid():
             cleaned_data = formUser.cleaned_data
             try:

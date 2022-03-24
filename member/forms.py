@@ -49,7 +49,7 @@ def has_special_characters(inputString):
 
 
 class UserForm(forms.Form):
-    username = forms.CharField(max_length=150, strip=True)
+    username = forms.CharField(max_length=150, strip=True, required=False)
     email = forms.EmailField(max_length=255, required=True)
     password = forms.CharField(
         min_length=8,
@@ -66,10 +66,6 @@ class UserForm(forms.Form):
             'min_length': "Password_check must be longer than 7 characters"
         }
     )
-
-    class Meta:
-        model = User
-        fields = ['username', 'email']
 
     def clean(self):
         cleaned_data = super(UserForm, self).clean()

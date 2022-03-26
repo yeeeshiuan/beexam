@@ -1,11 +1,16 @@
 from django.conf import settings
+from django.contrib.auth import login, authenticate
 from django.db import IntegrityError, transaction
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from smtplib import SMTPException
 from beexam.settings import env
+from beexam.utils import account_activation_token
 from member.serializers import UserSerializer
 from member.forms import UserForm
 from member.models import User
@@ -35,7 +40,7 @@ class UserViewSet(viewsets.ModelViewSet):
             cleaned_data = formUser.cleaned_data
             try:
                 with transaction.atomic():
-                    user = User.objects.create(email=cleaned_data['email'], is_active=False)
+                    user = User.objects.create(email=cleaned_data['email'])
                     user.set_password(cleaned_data['password'])
 
                     if "username" in cleaned_data:
@@ -44,11 +49,15 @@ class UserViewSet(viewsets.ModelViewSet):
                     user.full_clean()
                     user.save()
 
+                    uid = urlsafe_base64_encode(force_bytes(user.pk))
+                    token = account_activation_token.make_token(user)
                     body_html = render_to_string(
                         'member/email/activateAccount.html',
                         {
                             'project_name': settings.PROJECT_NAME,
-                            'activate_url': 'http://google.com',
+                            'activate_url': request.build_absolute_uri(
+                                f"/activate/{uid}/{token}?email={user.email}"
+                            ),
                         }
                     )
                     user.email_user(
@@ -83,3 +92,17 @@ class UserViewSet(viewsets.ModelViewSet):
                 'success': False,
                 'errors': dict(formUser.errors.items())
             })
+
+def activate(request, uidb64, token):
+    email = request.GET.get('email')
+
+    user = authenticate(
+            request=request,
+            uidb64=uidb64,
+            email=email,
+            token=token
+        )
+
+    if user is not None:
+        login(request, user)
+    return redirect('/users/', request)

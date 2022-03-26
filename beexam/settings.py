@@ -21,6 +21,9 @@ env = environ.Env()
 # reading .env file
 environ.Env.read_env()
 
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
+PROJECT_NAME = os.path.basename(PROJECT_ROOT)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 

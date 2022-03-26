@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import IntegrityError, transaction
+from django.template.loader import render_to_string
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
@@ -42,15 +44,22 @@ class UserViewSet(viewsets.ModelViewSet):
                     user.full_clean()
                     user.save()
 
+                    body_html = render_to_string(
+                        'member/email/activateAccount.html',
+                        {
+                            'project_name': settings.PROJECT_NAME,
+                            'activate_url': 'http://google.com',
+                        }
+                    )
                     user.email_user(
-                        'Subject here',
-                        'Here is the message.',
+                        "{0}: Activate your account!".format(settings.PROJECT_NAME),
+                        '',
                         env('EMAIL_HOST_USER'),
                         fail_silently=False,
                         auth_user=None,
                         auth_password=None,
                         connection=None,
-                        html_message='<p>This is html message.</p><br /><b>bold</b>'
+                        html_message=body_html
                     )
             except Exception as e:
                 message = "{0}".format(e)

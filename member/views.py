@@ -1,12 +1,8 @@
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from rest_framework import viewsets
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
-from traceback import format_exception
 from smtplib import SMTPException
-import sys
 from beexam.settings import env
 from member.serializers import UserSerializer
 from member.forms import UserForm
@@ -56,23 +52,22 @@ class UserViewSet(viewsets.ModelViewSet):
                         connection=None,
                         html_message='<p>This is html message.</p><br /><b>bold</b>'
                     )
-            except ValidationError as e:
-                return Response({'error': str(e), 'type':'ValidationError'})
-                #exc_info = sys.exc_info()
-                #return Response({'error': ''.join(format_exception(*exc_info))})
-            except IntegrityError as e:
-                return Response({'error': str(e), 'type':'IntegrityError'})
-                #exc_info = sys.exc_info()
-                #return Response({'error': ''.join(format_exception(*exc_info))})
-            except SMTPException as e:
-                return Response({'error': str(e), 'type':'SMTPException'})
-                #exc_info = sys.exc_info()
-                #return Response({'error': ''.join(format_exception(*exc_info))})
             except Exception as e:
-                return Response({'error': str(e), 'type':'There has been a unknown error in the database'})
+                message = "{0}".format(e)
+                message = message.replace("\n", "<br>")
+                message = message.replace("\"", "'")
+                return Response({
+                    'success': False,
+                    'errors': {
+                        'others': [message]
+                    }
+                })
 
             serializer = UserSerializer(user)
-            return Response(serializer.data)
+            return Response({
+                'success': True,
+                'data': serializer.data
+            })
 
         else:
             return Response({

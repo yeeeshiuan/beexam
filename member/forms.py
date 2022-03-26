@@ -2,12 +2,13 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import string
+
 from member.models import User
 
 def has_numbers(inputString):
     if not any(char.isdigit() for char in inputString):
         raise ValidationError(
-            _('There is no number in %(value)s'),
+            _('There is no number in the password'),
             params={'value': inputString},
         )
 
@@ -19,8 +20,7 @@ def has_upper_letters(inputString):
             break
     if res:
         raise ValidationError(
-            _('There is no upper letter in %(value)s'),
-            params={'value': inputString},
+            _('There is no upper letter in the password')
         )
 
 def has_lower_letters(inputString):
@@ -31,7 +31,7 @@ def has_lower_letters(inputString):
             break
     if res:
         raise ValidationError(
-            _('There is no lower letter in %(value)s'),
+            _('There is no lower letter in the password'),
             params={'value': inputString},
         )
 
@@ -43,7 +43,7 @@ def has_special_characters(inputString):
             break
     if res:
         raise ValidationError(
-            _('There is no special characters in %(value)s'),
+            _('There is no special characters in the password'),
             params={'value': inputString},
         )
 

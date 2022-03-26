@@ -92,20 +92,24 @@
                             <form  onsubmit="post_signup(event)" id="signup-form">
                                 <div class="form-floating mb-3">
                                     <input type="email" class="form-control rounded-4 text-dark"
-                                           id="email" placeholder="name@example.com">
+                                           id="signup_email" placeholder="name@example.com">
                                     <label for="floatingInput" class="text-muted">Email address</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="password" class="form-control rounded-4 text-dark"
-                                           id="password" placeholder="Password">
+                                           id="signup_password" placeholder="Password">
                                     <label for="floatingPassword" class="text-muted">Password</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="password" class="form-control rounded-4 text-dark"
-                                           id="password_check" placeholder="Password again">
+                                           id="signup_password_check" placeholder="Password again">
                                     <label for="floatingPassword" class="text-muted">Password again</label>
                                 </div>
-                                <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Sign up</button>
+                                <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary"
+                                        type="submit"
+                                        id="signup_button">
+                                    Sign up
+                                </button>
                                 <input type="hidden" id="post-user-url" data-url="{% url "user-list" %}" />
                                 <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
                                 <hr class="my-4">
@@ -140,15 +144,19 @@
                             <form class="">
                                 <div class="form-floating mb-3">
                                     <input type="email" class="form-control rounded-4 text-dark"
-                                           id="email" placeholder="name@example.com">
+                                           id="login_email" placeholder="name@example.com">
                                     <label for="floatingInput" class="text-muted">Email address</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="password" class="form-control rounded-4 text-dark"
-                                           id="password" placeholder="Password">
+                                           id="login_password" placeholder="Password">
                                     <label for="floatingPassword" class="text-muted">Password</label>
                                 </div>
-                                <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit">Login</button>
+                                <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary"
+                                        type="submit"
+                                        id="login_button">
+                                    Login
+                                </button>
                                 <small class="text-muted">By clicking Login, you agree to the terms of use.</small>
                                 <hr class="my-4">
                                 <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>

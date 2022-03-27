@@ -82,3 +82,69 @@ function post_signup(e){
         }
     });
 }
+
+function post_login(e){
+    e.preventDefault();
+    const form = $('#login-form')[0];
+    const email = form.elements.login_email.value;
+    const password = form.elements.login_password.value;
+    const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+    const postUrl = $('#post-login').attr("data-url");
+
+    $('#login_email').removeClass("border-danger");
+    $('#login_password').removeClass("border-danger");
+    $("#login-danger-alert").html('');
+    $("#login-danger-alert").hide();
+
+    $('#login_button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...')
+                      .attr('disabled', true);
+
+    $.ajax({
+        type:'POST',
+        url:postUrl,
+        data:{
+            email:email,
+            password:password,
+        },
+        headers:{"X-CSRFToken": crf_token},
+        success:function(data){
+            $('#login_button').html('Login')
+                              .attr('disabled', false);
+
+            if ( data.success === true )
+            {
+                $('#loginModal').modal('hide');
+                $(':input','#login-form')
+                    .not(':button, :submit, :reset, :hidden')
+                    .val('');
+                $("#success-alert").show();
+                $("#success-alert").html('Welcome back!');
+                $("#success-alert").fadeTo(4000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(6000);
+                    $("#success-alert").html('');
+                    $("#success-alert").hide();
+                });
+
+                location.reload();
+            }
+            else
+            {
+                var message = "";
+                for (const [key, values] of Object.entries(data.errors))
+                {
+                    values.forEach(function(item, index, array) {
+                        message += item + "<br>";
+                    });
+                }
+
+                $("#login-danger-alert").html(message);
+                $("#login-danger-alert").show();
+                $('#login_email').addClass("border-danger");
+                $('#login_password').addClass("border-danger");
+            }
+        },
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}

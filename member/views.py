@@ -5,9 +5,12 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from beexam.settings import env
 from beexam.utils import account_activation_token
 from member.serializers import UserSerializer
@@ -106,3 +109,20 @@ def activate(request, uidb64, token):
         login(request, user)
 
     return render(request, 'main/index.html')
+
+def postLogin(request):
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    user = authenticate(request, username=email, password=password)
+    if user is not None:
+        login(request, user)
+        return JsonResponse({'success': True})
+    else:
+        data = {
+            'success': False,
+            'errors': {
+                'message': ["Sorry, that login was invalid. Please try again."]
+            }
+        }
+        return JsonResponse(data)

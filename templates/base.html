@@ -34,6 +34,7 @@
 
     </head>
     <body class="d-flex h-100 text-center text-white bg-dark">
+        {% csrf_token %}
 
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
             <symbol id="github" viewBox="0 0 16 16">
@@ -140,8 +141,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
+                        <div id="login-danger-alert" class="alert alert-danger" role="alert" style="display: none;"></div>
                         <div class="modal-body p-5 pt-0">
-                            <form class="">
+                            <form  onsubmit="post_login(event)" id="login-form">
                                 <div class="form-floating mb-3">
                                     <input type="email" class="form-control rounded-4 text-dark"
                                            id="login_email" placeholder="name@example.com">
@@ -157,6 +159,7 @@
                                         id="login_button">
                                     Login
                                 </button>
+                                <input type="hidden" id="post-login" data-url="{% url "login" %}" />
                                 <small class="text-muted">By clicking Login, you agree to the terms of use.</small>
                                 <hr class="my-4">
                                 <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>

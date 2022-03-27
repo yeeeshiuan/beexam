@@ -15,6 +15,7 @@ urlpatterns = [
         member_views.activate,
         name='activate'
     ),
+    path('post-login/', member_views.postLogin, name="login"),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

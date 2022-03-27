@@ -1,14 +1,13 @@
 from django.conf import settings
 from django.contrib.auth import login, authenticate
-from django.db import IntegrityError, transaction
-from django.shortcuts import render, redirect
+from django.db import transaction
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
-from smtplib import SMTPException
 from beexam.settings import env
 from beexam.utils import account_activation_token
 from member.serializers import UserSerializer
@@ -105,4 +104,5 @@ def activate(request, uidb64, token):
 
     if user is not None:
         login(request, user)
-    return redirect('/users/', request)
+
+    return render(request, 'main/index.html')

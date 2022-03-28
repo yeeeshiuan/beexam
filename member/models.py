@@ -107,6 +107,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    is_verified = models.BooleanField(
+        _("verified"),
+        default=False,
+        help_text=_("Designates whether this user's email is be verified."),
+    )
 
     objects = UserManager()
 

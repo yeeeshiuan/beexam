@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.db import transaction
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.http import JsonResponse
@@ -11,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+import json
 from beexam.settings import env
 from beexam.utils import account_activation_token
 from member.serializers import UserSerializer
@@ -105,10 +107,17 @@ def activate(request, uidb64, token):
             token=token
         )
 
+    message = None
     if user is not None:
-        login(request, user)
+        if user.is_verified:
+            message = {'danger': 'Your account has already verified! Please login.'}
+        else:
+            user.is_verified = True;
+            user.save()
+            login(request, user)
+            message = {'success': 'Your account is verified! Welcome back.'}
 
-    return render(request, 'main/index.html')
+    return render(request, 'main/index.html', {'loadingMessage': json.dumps(message)})
 
 def postLogin(request):
     email = request.POST.get('email')
@@ -117,7 +126,7 @@ def postLogin(request):
     user = authenticate(request, username=email, password=password)
     if user is not None:
         login(request, user)
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'url': reverse('index')})
     else:
         data = {
             'success': False,

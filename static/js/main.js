@@ -1,4 +1,36 @@
 
+$(document).ready(function() {
+    // the first time page loaded
+    const loadingMessageJson = $('#first-loading-message').attr("data-message");
+    if ( loadingMessageJson !== '' )
+    {
+        const loadingMessageObj = JSON.parse(loadingMessageJson);
+        if ( loadingMessageObj.hasOwnProperty("danger") )
+        {
+            $("#danger-alert").show();
+            $("#danger-alert").html(loadingMessageObj.danger);
+            $("#danger-alert").fadeTo(4000, 500).slideUp(500, function(){
+                $("#danger-alert").slideUp(6000);
+                $("#danger-alert").html('');
+                $("#danger-alert").hide();
+            });
+        }
+        else if ( loadingMessageObj.hasOwnProperty("success") )
+        {
+            $("#success-alert").show();
+            $("#success-alert").html(loadingMessageObj.success);
+            $("#success-alert").fadeTo(4000, 500).slideUp(500, function(){
+                $("#success-alert").slideUp(6000);
+                $("#success-alert").html('');
+                $("#success-alert").hide();
+            });
+        }
+    }
+
+    // clean the hidden input value
+    $('#first-loading-message').attr("data-message", "");
+});
+
 function post_signup(e){
     e.preventDefault();
     const form = $('#signup-form')[0];
@@ -125,7 +157,8 @@ function post_login(e){
                     $("#success-alert").hide();
                 });
 
-                location.reload();
+                console.log(data.url);
+                window.location.href = data.url;
             }
             else
             {

@@ -6,3 +6,6 @@ def index(request):
 
 def dashboard(request):
     return render(request, 'main/dashboard.html', {'loadingMessage':''})
+
+def profile(request):
+    return render(request, 'main/profile.html', {'loadingMessage':''})

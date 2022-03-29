@@ -10,6 +10,7 @@ router.register(r'users', member_views.UserViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', main_views.index, name='index'),
+    path('dashboard/', main_views.dashboard, name='dashboard'),
     path(
         'activate/<uidb64>/<token>/',
         member_views.activate,

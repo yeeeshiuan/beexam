@@ -114,9 +114,9 @@ def activate(request, uidb64, token):
         else:
             user.is_verified = True;
             user.save()
-            login(request, user)
-            message = {'success': 'Your account is verified! Welcome back.'}
-
+            message = {'success': 'Your account is verified! Please login.'}
+    else:
+        message = {'danger': 'The activated code is invalid.'}
     return render(request, 'main/index.html', {'loadingMessage': json.dumps(message)})
 
 def postLogin(request):

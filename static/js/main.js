@@ -145,10 +145,11 @@ function post_login(e){
 
             if ( data.success === true )
             {
-                $('#loginModal').modal('hide');
+                //$('#loginModal').modal('hide');
                 $(':input','#login-form')
                     .not(':button, :submit, :reset, :hidden')
                     .val('');
+                /*
                 $("#success-alert").show();
                 $("#success-alert").html('Welcome back!');
                 $("#success-alert").fadeTo(4000, 500).slideUp(500, function(){
@@ -156,8 +157,7 @@ function post_login(e){
                     $("#success-alert").html('');
                     $("#success-alert").hide();
                 });
-
-                console.log(data.url);
+                */
                 window.location.href = data.url;
             }
             else

@@ -5,9 +5,43 @@
 {% block content %}
 <main class="px-1">
     <h1>Dashboard</h1>
-    <p class="lead">This is a demo website that provides many features.</p>
-    <p class="lead">
-    <a href="#" class="btn btn-lg btn-success fw-bold border-white">Cool</a>
-    </p>
+
+    <div class="mt-5">
+        <h5 class="text-start mb-3">Resend Email Verification</h4>
+        <form class="needs-validation" novalidate="" id="resend-email-form">
+            <hr class="my-4">
+            <button class="w-60 btn btn-primary btn-lg" type="submit">Resend</button>
+            <hr class="my-4">
+        </form>
+    </div>
+
+    <div class="mt-5">
+        <h5 class="text-start mb-3">Update The Password</h4>
+        <form class="needs-validation" novalidate="" id="password-form">
+            <hr class="my-4">
+            <div class="mb-3 row">
+                <label for="oldPassword" class="col-4 col-form-label">Old Password</label>
+                <div class="col-8">
+                    <input type="password" class="form-control" id="oldPassword">
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="mb-3 row">
+                <label for="newPassword" class="col-4 col-form-label">Password</label>
+                <div class="col-8">
+                    <input type="password" class="form-control" id="newPassword">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="newPasswordCheck" class="col-4 col-form-label">Confirm Password</label>
+                <div class="col-8">
+                    <input type="password" class="form-control" id="newPasswordCheck">
+                </div>
+            </div>
+            <hr class="my-4">
+            <button class="w-60 btn btn-primary btn-lg" type="submit">Update the password</button>
+            <hr class="my-4">
+        </form>
+    </div>
 </main>
 {% endblock %}

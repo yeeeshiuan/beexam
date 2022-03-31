@@ -149,9 +149,10 @@ function post_login(e){
                 $(':input','#login-form')
                     .not(':button, :submit, :reset, :hidden')
                     .val('');
+                var message = "Login successful! Reloading...";
                 $("#success-alert").show();
                 $("#success-alert").html(
-                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Login...'
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>' + message
                 );
                 $("#success-alert").fadeTo(4000, 500).slideUp(500, function(){
                     $("#success-alert").slideUp(6000, function(){
@@ -216,9 +217,10 @@ function patch_username(e){
                 $(':input','#username-form')
                     .not(':button, :submit, :reset, :hidden')
                     .val('');
+                var message = "Username updated successful! Reloading...";
                 $("#username-success-alert").show();
                 $("#username-success-alert").html(
-                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Username updating...'
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>' + message
                 );
                 $("#username-success-alert").fadeTo(4000, 500).slideUp(500, function(){
                     $("#username-success-alert").slideUp(6000, function(){
@@ -288,9 +290,10 @@ function patch_password(e){
                 $(':input','#password-form')
                     .not(':button, :submit, :reset, :hidden')
                     .val('');
+                var message = "Password updated successful! Reloading...";
                 $("#password-success-alert").show();
                 $("#password-success-alert").html(
-                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Password updating...'
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>' + message
                 );
                 $("#password-success-alert").fadeTo(4000, 500).slideUp(500, function(){
                     $("#password-success-alert").slideUp(6000, function(){

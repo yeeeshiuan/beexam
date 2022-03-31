@@ -16,7 +16,7 @@ import json
 from beexam.settings import env
 from beexam.utils import account_activation_token
 from member.serializers import UserSerializer
-from member.forms import UserForm
+from member.forms import UserForm, UserResetUsernameForm
 from member.models import User
 
 
@@ -96,6 +96,31 @@ class UserViewSet(viewsets.ModelViewSet):
                 'success': False,
                 'errors': dict(formUser.errors.items())
             })
+
+    # [PATCH] api/users/pk/
+    def partial_update(self, request, pk=None, **kwargs):
+        action_type = request.POST.get('action')
+
+        success = False
+        message = "The request is not valid."
+        if action_type == 'username':
+            formUser = UserResetUsernameForm(request.data)
+            if formUser.is_valid():
+                cleaned_data = formUser.cleaned_data
+                user = User.objects.get(pk=pk)
+                user.username = cleaned_data['username']
+                user.save()
+                success = True
+                message = None
+        elif action_type == 'password':
+            pass
+
+        response = {'success': success}
+        if message:
+            response['errors'] = {'others': [message]}
+
+        return Response(response)
+
 
 def activate(request, uidb64, token):
     email = request.GET.get('email')

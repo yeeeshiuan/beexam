@@ -181,3 +181,70 @@ function post_login(e){
         }
     });
 }
+
+function patch_username(e){
+    e.preventDefault();
+
+    const form = $('#username-form')[0];
+    const username = form.elements.newusername.value;
+    const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+    const patchUrl = $('#pk-url').attr("data-url");
+
+    $('#newusername').removeClass("border-danger");
+    $("#username-danger-alert").html('');
+    $("#username-danger-alert").hide();
+
+    $('#username-button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...')
+                         .attr('disabled', true);
+
+    $.ajax({
+        type:'PATCH',
+        url:patchUrl,
+        data:{
+            action: 'username',
+            username: username,
+        },
+        headers:{"X-CSRFToken": crf_token},
+        success:function(data){
+            $('#username-button').html('Update')
+                                 .attr('disabled', false);
+
+            console.log(data);
+            if ( data.success === true )
+            {
+                $(':input','#username-form')
+                    .not(':button, :submit, :reset, :hidden')
+                    .val('');
+                /*
+                $("#username-success-alert").show();
+                $("#username-success-alert").html('Username update successful!');
+                $("#username-success-alert").fadeTo(4000, 500).slideUp(500, function(){
+                    $("#username-success-alert").slideUp(6000);
+                    $("#username-success-alert").html('');
+                    $("#username-success-alert").hide();
+                });
+                */
+
+                const currentUrl = $('#current-page').attr("data-url");
+                window.location.href = currentUrl;
+            }
+            else
+            {
+                var message = "";
+                for (const [key, values] of Object.entries(data.errors))
+                {
+                    values.forEach(function(item, index, array) {
+                        message += item + "<br>";
+                    });
+                }
+
+                $("#username-danger-alert").html(message);
+                $("#username-danger-alert").show();
+                $('#newusername').addClass("border-danger");
+            }
+        },
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}

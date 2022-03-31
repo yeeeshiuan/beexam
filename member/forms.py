@@ -82,3 +82,7 @@ class UserForm(forms.Form):
             )
 
         return cleaned_data
+
+
+class UserResetUsernameForm(forms.Form):
+    username = forms.CharField(max_length=150, strip=True, required=True)

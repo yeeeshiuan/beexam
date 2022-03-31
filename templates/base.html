@@ -196,6 +196,10 @@
         </div>
 
         <input type="hidden" id="first-loading-message" data-message="{{ loadingMessage }}"/>
+        {% if user.is_authenticated %}
+            <input type="hidden" id="pk-url" data-url="{% url "user-detail" user.pk %}" />
+        {% endif %}
+        <input type="hidden" id="current-page" data-url="{{ request.build_absolute_uri }}"/>
 
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>

@@ -8,21 +8,24 @@
 
     <div class="mt-5">
         <h5 class="text-start mb-3">Update Username</h4>
-        <form class="row g-3 needs-validation" novalidate="" id="username-form">
+        <div id="username-success-alert" class="alert alert-success" role="alert" style="display: none;"></div>
+        <div id="username-danger-alert" class="alert alert-danger" role="alert" style="display: none;"></div>
+        <form class="row g-3 needs-validation" novalidate=""
+              onsubmit="patch_username(event)" id="username-form">
             <hr class="my-4">
             <div class="col-3">
                 <label for="oldusername" class="visually-hidden">Old Username</label>
                 <input type="text"
-                       class="text-light text-center form-control-plaintext"
+                       class="bg-light text-center form-control-plaintext"
                        id="oldusername"
-                       value="old username" readonly>
+                       value="{{ user.username }}" readonly>
             </div>
             <div class="col-7">
-                <label for="newusername" class="visually-hidden">New Username</label>
-                <input type="text" class="form-control" id="newusername" placeholder="New Username">
+                <label for="newusername" class="visually-hidden">Update Username</label>
+                <input type="text" class="form-control" id="newusername" placeholder="Update Username">
             </div>
             <div class="col-2">
-                <button type="submit" class="btn btn-primary mb-3">Update</button>
+                <button type="submit" class="btn btn-primary mb-3" id="username-button">Update</button>
             </div>
             <hr class="my-4">
         </form>

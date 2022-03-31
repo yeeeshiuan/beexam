@@ -86,3 +86,28 @@ class UserForm(forms.Form):
 
 class UserResetUsernameForm(forms.Form):
     username = forms.CharField(max_length=150, strip=True, required=True)
+
+
+class UserResetPasswordForm(forms.Form):
+    password = forms.CharField(
+        min_length=8,
+        required=True,
+        error_messages={
+            'min_length': "Password must be longer than 7 characters"
+        }
+    )
+    new_password = forms.CharField(
+        min_length=8,
+        required=True,
+        error_messages={
+            'min_length': "New password must be longer than 7 characters"
+        },
+        validators=[has_numbers,has_upper_letters,has_lower_letters,has_special_characters]
+    )
+    new_password_check = forms.CharField(
+        min_length=8,
+        required=True,
+        error_messages={
+            'min_length': "New password check must be longer than 7 characters"
+        }
+    )

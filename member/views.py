@@ -16,7 +16,7 @@ import json
 from beexam.settings import env
 from beexam.utils import account_activation_token
 from member.serializers import UserSerializer
-from member.forms import UserForm, UserResetUsernameForm
+from member.forms import UserForm, UserResetUsernameForm, UserResetPasswordForm
 from member.models import User
 
 
@@ -102,7 +102,7 @@ class UserViewSet(viewsets.ModelViewSet):
         action_type = request.POST.get('action')
 
         success = False
-        message = "The request is not valid."
+        errors = {'others': ["The request is not valid."]}
         if action_type == 'username':
             formUser = UserResetUsernameForm(request.data)
             if formUser.is_valid():
@@ -111,13 +111,34 @@ class UserViewSet(viewsets.ModelViewSet):
                 user.username = cleaned_data['username']
                 user.save()
                 success = True
-                message = None
+                errors = None
+            else:
+                errors = dict(formUser.errors.items())
+
         elif action_type == 'password':
-            pass
+            formUser = UserResetPasswordForm(request.data)
+            if formUser.is_valid():
+                cleaned_data = formUser.cleaned_data
+                user = User.objects.get(pk=pk)
+                if user.check_password(cleaned_data['password']):
+                    user.set_password(cleaned_data['new_password'])
+                    user.save()
+                    user = authenticate(
+                        request,
+                        username=user.email,
+                        password=cleaned_data['new_password']
+                    )
+                    login(request, user)
+                    success = True
+                    errors = None
+                else:
+                    errors = {'oldPassword': ["The old password is not correct."]}
+            else:
+                errors = dict(formUser.errors.items())
 
         response = {'success': success}
-        if message:
-            response['errors'] = {'others': [message]}
+        if errors:
+            response['errors'] = errors
 
         return Response(response)
 

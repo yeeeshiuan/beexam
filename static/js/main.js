@@ -145,20 +145,22 @@ function post_login(e){
 
             if ( data.success === true )
             {
-                //$('#loginModal').modal('hide');
+                $('#loginModal').modal('hide');
                 $(':input','#login-form')
                     .not(':button, :submit, :reset, :hidden')
                     .val('');
-                /*
                 $("#success-alert").show();
-                $("#success-alert").html('Welcome back!');
+                $("#success-alert").html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Login...'
+                );
                 $("#success-alert").fadeTo(4000, 500).slideUp(500, function(){
-                    $("#success-alert").slideUp(6000);
+                    $("#success-alert").slideUp(6000, function(){
+                        const currentUrl = $('#current-page').attr("data-url");
+                        window.location.href = currentUrl;
+                    });
                     $("#success-alert").html('');
                     $("#success-alert").hide();
                 });
-                */
-                window.location.href = data.url;
             }
             else
             {
@@ -209,24 +211,23 @@ function patch_username(e){
             $('#username-button').html('Update')
                                  .attr('disabled', false);
 
-            console.log(data);
             if ( data.success === true )
             {
                 $(':input','#username-form')
                     .not(':button, :submit, :reset, :hidden')
                     .val('');
-                /*
                 $("#username-success-alert").show();
-                $("#username-success-alert").html('Username update successful!');
+                $("#username-success-alert").html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Username updating...'
+                );
                 $("#username-success-alert").fadeTo(4000, 500).slideUp(500, function(){
-                    $("#username-success-alert").slideUp(6000);
+                    $("#username-success-alert").slideUp(6000, function(){
+                        const currentUrl = $('#current-page').attr("data-url");
+                        window.location.href = currentUrl;
+                    });
                     $("#username-success-alert").html('');
                     $("#username-success-alert").hide();
                 });
-                */
-
-                const currentUrl = $('#current-page').attr("data-url");
-                window.location.href = currentUrl;
             }
             else
             {
@@ -241,6 +242,80 @@ function patch_username(e){
                 $("#username-danger-alert").html(message);
                 $("#username-danger-alert").show();
                 $('#newusername').addClass("border-danger");
+            }
+        },
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}
+
+function patch_password(e){
+    e.preventDefault();
+
+    const form = $('#password-form')[0];
+    const password = form.elements.oldPassword.value;
+    const new_password = form.elements.newPassword.value;
+    const new_password_check = form.elements.newPasswordCheck.value;
+    const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+    const patchUrl = $('#pk-url').attr("data-url");
+
+    $('#oldPassword').removeClass("border-danger");
+    $('#newPassword').removeClass("border-danger");
+    $('#newPasswordCheck').removeClass("border-danger");
+    $("#password-danger-alert").html('');
+    $("#password-danger-alert").hide();
+
+    $('#password-button').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...')
+                         .attr('disabled', true);
+
+    $.ajax({
+        type:'PATCH',
+        url:patchUrl,
+        data:{
+            action: 'password',
+            password: password,
+            new_password: new_password,
+            new_password_check: new_password_check,
+        },
+        headers:{"X-CSRFToken": crf_token},
+        success:function(data){
+            $('#password-button').html('Update')
+                                 .attr('disabled', false);
+
+            if ( data.success === true )
+            {
+                $(':input','#password-form')
+                    .not(':button, :submit, :reset, :hidden')
+                    .val('');
+                $("#password-success-alert").show();
+                $("#password-success-alert").html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Password updating...'
+                );
+                $("#password-success-alert").fadeTo(4000, 500).slideUp(500, function(){
+                    $("#password-success-alert").slideUp(6000, function(){
+                        const currentUrl = $('#current-page').attr("data-url");
+                        window.location.href = currentUrl;
+                    });
+                    $("#password-success-alert").html('');
+                    $("#password-success-alert").hide();
+                });
+            }
+            else
+            {
+                var message = "";
+                for (const [key, values] of Object.entries(data.errors))
+                {
+                    values.forEach(function(item, index, array) {
+                        message += item + "<br>";
+                    });
+                }
+
+                $("#password-danger-alert").html(message);
+                $("#password-danger-alert").show();
+                $('#oldPassword').addClass("border-danger");
+                $('#newPassword').addClass("border-danger");
+                $('#newPasswordCheck').addClass("border-danger");
             }
         },
         error : function(xhr,errmsg,err) {

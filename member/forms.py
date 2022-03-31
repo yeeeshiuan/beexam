@@ -72,6 +72,9 @@ class UserForm(forms.Form):
         password = cleaned_data.get('password')
         password_check = cleaned_data.get('password_check')
 
+        if not password or not password_check:
+            return cleaned_data
+
         if password != password_check:
             raise ValidationError(
                 _("The two passwords fields did not match."),

@@ -326,3 +326,62 @@ function patch_password(e){
         }
     });
 }
+
+function resend_activate_email(e){
+    e.preventDefault();
+
+    const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+    const targetUrl = $('#resend-activate-email-url').attr("data-url");
+
+    $("#resend-activate-email-danger-alert").html('');
+    $("#resend-activate-email-danger-alert").hide();
+
+    $('#resend-activate-email-button')
+        .html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...')
+        .attr('disabled', true);
+
+    $.ajax({
+        type:'POST',
+        url:targetUrl,
+        data:{},
+        headers:{"X-CSRFToken": crf_token},
+        success:function(data){
+            $('#resend-activate-email-button').html('Update')
+                                              .attr('disabled', false);
+
+            console.log(data);
+            if ( data.success === true )
+            {
+                var message = "Sent the Email successful! Reloading...";
+                $("#resend-activate-email-success-alert").show();
+                $("#resend-activate-email-success-alert").html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>' + message
+                );
+                $("#resend-activate-email-success-alert").fadeTo(4000, 500).slideUp(500, function(){
+                    $("#resend-activate-email-success-alert").slideUp(6000, function(){
+                        const currentUrl = $('#current-page').attr("data-url");
+                        window.location.href = currentUrl;
+                    });
+                    $("#resend-activate-email-success-alert").html('');
+                    $("#resend-activate-email-success-alert").hide();
+                });
+            }
+            else
+            {
+                var message = "";
+                for (const [key, values] of Object.entries(data.errors))
+                {
+                    values.forEach(function(item, index, array) {
+                        message += item + "<br>";
+                    });
+                }
+
+                $("#resend-activate-email-danger-alert").html(message);
+                $("#resend-activate-email-danger-alert").show();
+            }
+        },
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}

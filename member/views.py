@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -165,6 +166,7 @@ def activate(request, uidb64, token):
         message = {'danger': 'The activated code is invalid.'}
     return render(request, 'main/index.html', {'loadingMessage': json.dumps(message)})
 
+
 def postLogin(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
@@ -181,3 +183,42 @@ def postLogin(request):
             }
         }
         return JsonResponse(data)
+
+
+@login_required
+def resendActivateEmail(request):
+    success = False
+    errors = {'message': ['The user is not login.']}
+
+    user = request.user
+    if user is not None:
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = account_activation_token.make_token(user)
+        body_html = render_to_string(
+            'member/email/activateAccount.html',
+            {
+                'project_name': settings.PROJECT_NAME,
+                'activate_url': request.build_absolute_uri(
+                    f"/activate/{uid}/{token}?email={user.email}"
+                    ),
+                }
+            )
+        user.email_user(
+            "{0}: Activate your account!".format(settings.PROJECT_NAME),
+            '',
+            env('EMAIL_HOST_USER'),
+            fail_silently=False,
+            auth_user=None,
+            auth_password=None,
+            connection=None,
+            html_message=body_html
+        )
+        success = True
+        errors = None
+
+    data = {'success': success}
+
+    if errors:
+        data['errors'] = errors
+
+    return JsonResponse(data)

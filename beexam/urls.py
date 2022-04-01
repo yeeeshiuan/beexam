@@ -18,6 +18,7 @@ urlpatterns = [
         name='activate'
     ),
     path('post-login/', member_views.postLogin, name="login"),
+    path('resend-activate-email/', member_views.resendActivateEmail, name="resendActivateEmail"),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

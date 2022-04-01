@@ -1,24 +1,24 @@
 from django.conf import settings
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from django.http import JsonResponse
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+from rest_framework.permissions import BasePermission, IsAuthenticated
 import json
 from beexam.settings import env
 from beexam.utils import account_activation_token
-from member.serializers import UserSerializer
 from member.forms import UserForm, UserResetUsernameForm, UserResetPasswordForm
 from member.models import User
+from member.serializers import UserSerializer
 
 
 GUEST_SAFE_METHODS = ('GET', 'POST', 'HEAD', 'OPTIONS')
@@ -222,3 +222,9 @@ def resendActivateEmail(request):
         data['errors'] = errors
 
     return JsonResponse(data)
+
+
+@login_required
+def postLogout(request):
+    logout(request)
+    return JsonResponse({'success': True})

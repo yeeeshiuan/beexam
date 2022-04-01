@@ -5,6 +5,17 @@
 {% block content %}
 <main class="px-1">
     <h1>User Profile</h1>
+    <div class="mt-5">
+        <div id="logout-success-alert" class="alert alert-success" role="alert" style="display: none;"></div>
+        <form class="row g-3 needs-validation" novalidate=""
+              onsubmit="post_logout(event)" id="logout-form">
+            <input type="hidden" id="redirect-url" data-url="{% url "index" %}" />
+            <input type="hidden" id="post-logout-url" data-url="{% url "logout" %}" />
+            <div class="col-2">
+                <button type="submit" class="btn btn-warning mb-3" id="logout-button">Logout</button>
+            </div>
+        </form>
+    </div>
 
     <div class="mt-5">
         <h5 class="text-start mb-3">Update Username</h4>

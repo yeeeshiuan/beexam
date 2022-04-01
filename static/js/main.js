@@ -385,3 +385,46 @@ function resend_activate_email(e){
         }
     });
 }
+
+function post_logout(e){
+    e.preventDefault();
+
+    const crf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
+    const logoutUrl = $('#post-logout-url').attr("data-url");
+
+    $('#logout-button')
+        .html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...')
+        .attr('disabled', true);
+
+    $.ajax({
+        type:'POST',
+        url:logoutUrl,
+        data:{},
+        headers:{"X-CSRFToken": crf_token},
+        success:function(data){
+            $('#logout-button').html('Logout')
+                               .attr('disabled', false);
+
+            if ( data.success === true )
+            {
+                var message = "Logout successful! Reloading...";
+                $("#logout-success-alert").show();
+                $("#logout-success-alert").html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>' + message
+                );
+                $("#logout-success-alert").fadeTo(4000, 500).slideUp(500, function(){
+                    $("#logout-success-alert").slideUp(6000, function(){
+                        const redirectUrl = $('#redirect-url').attr("data-url");
+                        window.location.href = redirectUrl;
+                    });
+                    $("#logout-success-alert").html('');
+                    $("#logout-success-alert").hide();
+                });
+            }
+            console.log(data);
+        },
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+        }
+    });
+}

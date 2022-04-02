@@ -176,10 +176,20 @@
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"/></svg>
                                     Login with Twitter
                                 </button>
+                                <div class="fb-login-button"
+                                     data-width=""
+                                     data-size="large"
+                                     data-button-type="continue_with"
+                                     data-layout="default"
+                                     data-auto-logout-link="false"
+                                     data-use-continue-as="false">
+                                </div>
+                                <!--
                                 <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Login with Facebook
                                 </button>
+                                -->
                                 <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4" type="submit">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#github"/></svg>
                                     Login with GitHub
@@ -190,6 +200,7 @@
                 </div>
             </div>
 
+            <div id="fb-root"></div>
             <footer class="mt-auto text-white-50">
                 <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
             </footer>
@@ -200,7 +211,12 @@
             <input type="hidden" id="pk-url" data-url="{% url "user-detail" user.pk %}" />
         {% endif %}
         <input type="hidden" id="current-page" data-url="{{ request.build_absolute_uri }}"/>
+        <input type="hidden" id="facebook-id" data-key="{{ facebookId }}"/>
 
+        <script async defer crossorigin="anonymous"
+                src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=165374943526552&autoLogAppEvents=1"
+                nonce="MhAzjNtE">
+        </script>
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <script src="{% static 'js/main.js' %}"></script>

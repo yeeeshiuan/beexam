@@ -33,7 +33,10 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [env("WEBSITE_DOMAIN_NAME")]
+ALLOWED_HOSTS = [
+    env("WEBSITE_DOMAIN_NAME"),
+    env("WEBSITE_IP")
+]
 
 # Application definition
 
@@ -86,11 +89,12 @@ WSGI_APPLICATION = 'beexam.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'OPTIONS': {
-            'service': 'my_service',
-            'passfile': '.my_pgpass',
-        },
+        'ENGINE': env("DATABASE_DRIVER"),
+        'NAME': env("DATABASE_NAME"),
+        'USER': env("DATABASE_USER_NAME"),
+        'PASSWORD': env("DATABASE_USER_PASSWORD"),
+        'HOST': env("DATABASE_HOST"),
+        'PORT': env("DATABASE_HOST_POST")
     }
 }
 

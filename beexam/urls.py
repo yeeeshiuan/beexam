@@ -21,6 +21,7 @@ urlpatterns = [
     path('post-login/', member_views.postLogin, name="login"),
     path('resend-activate-email/', member_views.resendActivateEmail, name="resendActivateEmail"),
     path('post-logout/', member_views.postLogout, name="logout"),
+    path('fb-auth-callback/', member_views.fbAuthCallback, name="fbAuth"),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

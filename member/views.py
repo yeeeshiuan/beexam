@@ -228,3 +228,19 @@ def resendActivateEmail(request):
 def postLogout(request):
     logout(request)
     return JsonResponse({'success': True})
+
+def fbAuthCallback(request):
+    body_unicode = request.body.decode('utf-8')
+    body_data = json.loads(body_unicode)
+    print(body_data)
+    print(json.dumps(body_data))
+
+    message = {'success': 'FB callback successful.'}
+    return render(
+        request,
+        'main/index.html',
+        {
+            'loadingMessage':json.dumps(message),
+            'facebookId': env('FACEBOOK_APP_ID')
+        }
+    )

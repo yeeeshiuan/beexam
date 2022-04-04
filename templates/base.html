@@ -129,7 +129,7 @@
                                     Sign up with Twitter
                                 </button>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4"
-                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fbAuth'%}&state={csrf={{ csrf_token }}}">
+                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fbAuth'%}&state={{ csrf_token }}">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Sign up with Facebook
                                 </a>
@@ -178,7 +178,7 @@
                                     Login with Twitter
                                 </button>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4"
-                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fbAuth'%}&state={csrf={{ csrf_token }}}">
+                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fbAuth'%}&state={{ csrf_token }}">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Login with Facebook
                                 </a>

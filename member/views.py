@@ -229,13 +229,11 @@ def postLogout(request):
     logout(request)
     return JsonResponse({'success': True})
 
-def fbAuthCallback(request):
-    body_unicode = request.body.decode('utf-8')
-    body_data = json.loads(body_unicode)
-    print(body_data)
-    print(json.dumps(body_data))
 
-    message = {'success': 'FB callback successful.'}
+def fbAuthCallback(request):
+    code = request.GET.get('code')
+
+    message = {'success': 'FB call back successful.'}
     return render(
         request,
         'main/index.html',

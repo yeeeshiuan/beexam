@@ -272,7 +272,7 @@ def fbAuthCallback(request):
 
     message = {'success': 'Welcome Back!'}
     if user is None:
-        message = {'success': 'Welcome Back!'}
+        message = {'success': 'Register Successful!'}
         try:
             with transaction.atomic():
                 user = User.objects.create(email=userResData['email'])

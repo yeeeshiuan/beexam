@@ -120,8 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'member.User'
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    'member.backends.CustomModelBackend',
     'member.backends.ActivateBackend',
+    'member.backends.ThirdPartyBackend',
 )
 
 # Internationalization

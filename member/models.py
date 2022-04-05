@@ -75,19 +75,38 @@ class UserManager(BaseUserManager):
         return self.none()
 
 
+class RegisterType(models.TextChoices):
+    EMAIL = 'email', _('Email')
+    FACEBOOK = 'fb', _('Facebook')
+    GOOGLE = 'google', _('Google')
+
+
 class User(AbstractBaseUser, PermissionsMixin):
+
+    register_type = models.CharField(
+        max_length=16,
+        choices=RegisterType.choices,
+        default=RegisterType.EMAIL,
+    )
+
+    third_party_user_id = models.PositiveBigIntegerField(
+        _('third party user_id'),
+        unique=True,
+        null=True,
+        default=None,
+    )
 
     email_validator = EmailValidator()
 
     email = models.EmailField(
-            _("email"),
-            max_length=255,
-            unique=True,
-            blank=False,
-            validators=[email_validator],
-            error_messages={
-                "unique": _("A user with that email already exists."),
-            },
+        _("email"),
+        max_length=255,
+        unique=True,
+        blank=False,
+        validators=[email_validator],
+        error_messages={
+            "unique": _("A user with that email already exists."),
+        },
     )
 
     username = models.CharField( _("username"), max_length=150, blank=True)

@@ -14,10 +14,11 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.permissions import BasePermission, IsAuthenticated
 import json
+import urllib
 from beexam.settings import env
 from beexam.utils import account_activation_token
 from member.forms import UserForm, UserResetUsernameForm, UserResetPasswordForm
-from member.models import User
+from member.models import User, RegisterType
 from member.serializers import UserSerializer
 
 
@@ -233,7 +234,68 @@ def postLogout(request):
 def fbAuthCallback(request):
     code = request.GET.get('code')
 
-    message = {'success': 'FB call back successful.'}
+    # GET facebook short-term access_token
+    shortTermAPIUrl = env('FACEBOOK_SHORT_TERM_API_URL')
+    params = {
+        "client_id": env('FACEBOOK_APP_ID'),
+        "client_secret": env('FACEBOOK_APP_SECRET'),
+        "redirect_uri": env('FACEBOOK_REDIRECT_URL'),
+        "code": code
+    }
+    data = urllib.parse.urlencode(params)
+    data = data.encode('ascii')
+    req = urllib.request.Request(shortTermAPIUrl, data)
+    with request.urlopen(req) as response:
+        res = response.read()
+    shortTermResData = json.loads(res)
+
+    # GET facebook user data
+    userAPIUrl = env('FACEBOOK_USER_API_URL')
+    params = {
+        "fields": "id,name,email",
+        "access_token": shortTermResData['access_token']
+    }
+    data = urllib.parse.urlencode(params)
+    data = data.encode('ascii')
+    req = urllib.request.Request(userAPIUrl, data)
+    with request.urlopen(req) as response:
+        res = response.read()
+    userResData = json.loads(res)
+
+    # check if the user is exist
+    user = authenticate(
+        request=request,
+        email=userResData['email'],
+        third_party_user_id=userResData['id'],
+        register_type=RegisterType.FACEBOOK.value,
+    )
+
+    message = {'success': 'Welcome Back!'}
+    if user is None:
+        message = {'success': 'Welcome Back!'}
+        try:
+            with transaction.atomic():
+                user = User.objects.create(email=userResData['email'])
+                user.set_password('@'+userResData['id']+'@')
+                user.username = userResData['name']
+                user.third_party_user_id = userResData['id']
+                user.register_type = RegisterType.FACEBOOK
+                user.is_verified = True
+                user.save()
+
+                user = authenticate(
+                    request=request,
+                    email=userResData['email'],
+                    third_party_user_id=userResData['id'],
+                    register_type=RegisterType.FACEBOOK.value,
+                )
+                login(request, user)
+
+        except Exception as e:
+            message = {'danger': 'Something went wrong in the server side!'}
+    else:
+        login(request, user)
+
     return render(
         request,
         'main/index.html',

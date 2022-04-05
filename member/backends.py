@@ -1,11 +1,11 @@
-from django.contrib.auth.backends import BaseBackend
+from django.contrib.auth.backends import BaseBackend, ModelBackend
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from beexam.utils import account_activation_token  
 from member.models import User, RegisterType
 
 
-class CustomModelBackend(BaseBackend):
+class CustomModelBackend(ModelBackend):
     """
     Authenticates against settings.AUTH_USER_MODEL.
     """

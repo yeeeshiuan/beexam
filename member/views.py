@@ -245,7 +245,7 @@ def fbAuthCallback(request):
     data = urllib.parse.urlencode(params)
     data = data.encode('ascii')
     req = urllib.request.Request(shortTermAPIUrl, data)
-    with request.urlopen(req) as response:
+    with urllib.request.urlopen(req) as response:
         res = response.read()
     shortTermResData = json.loads(res)
 
@@ -258,7 +258,7 @@ def fbAuthCallback(request):
     data = urllib.parse.urlencode(params)
     data = data.encode('ascii')
     req = urllib.request.Request(userAPIUrl, data)
-    with request.urlopen(req) as response:
+    with urllib.request.urlopen(req) as response:
         res = response.read()
     userResData = json.loads(res)
 

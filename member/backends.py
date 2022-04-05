@@ -22,7 +22,7 @@ class CustomModelBackend(BaseBackend):
             # difference between an existing and a nonexistent user (#20760).
             User().set_password(password)
         else:
-            if user.register_type === RegisterType.EMAIL.value:
+            if user.register_type == RegisterType.EMAIL.value:
                 if user.check_password(password) and self.user_can_authenticate(user):
                     return user
 

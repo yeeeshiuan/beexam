@@ -160,5 +160,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    @property
     def isLoginByPassword(self):
         return self.register_type == RegisterType.EMAIL

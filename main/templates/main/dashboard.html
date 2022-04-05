@@ -21,7 +21,7 @@
     </div>
     {% endif %}
 
-    {% if not user.isLoginByPassword() %}
+    {% if user.isLoginByPassword %}
     <div class="mt-5">
         <h5 class="text-start mb-3">Update The Password</h4>
         <div id="password-success-alert" class="alert alert-success" role="alert" style="display: none;"></div>

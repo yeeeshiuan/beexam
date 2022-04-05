@@ -92,6 +92,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     third_party_user_id = models.PositiveBigIntegerField(
         _('third party user_id'),
         unique=True,
+        blank=True,
         null=True,
         default=None,
     )

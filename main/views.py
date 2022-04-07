@@ -9,7 +9,8 @@ def index(request):
         'main/index.html',
         {
             'loadingMessage':'',
-            'facebookId': env('FACEBOOK_APP_ID')
+            'facebookId': env('FACEBOOK_APP_ID'),
+            'googleId': env('GOOGLE_APP_ID')
         }
     )
 
@@ -23,7 +24,8 @@ def dashboard(request):
         'main/dashboard.html',
         {
             'loadingMessage':'',
-            'facebookId': env('FACEBOOK_APP_ID')
+            'facebookId': env('FACEBOOK_APP_ID'),
+            'googleId': env('GOOGLE_APP_ID')
         }
     )
 
@@ -34,6 +36,7 @@ def profile(request):
         'main/profile.html',
         {
             'loadingMessage':'',
-            'facebookId': env('FACEBOOK_APP_ID')
+            'facebookId': env('FACEBOOK_APP_ID'),
+            'googleId': env('GOOGLE_APP_ID')
         }
     )

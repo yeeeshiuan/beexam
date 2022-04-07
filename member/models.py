@@ -89,8 +89,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=RegisterType.EMAIL,
     )
 
-    third_party_user_id = models.PositiveBigIntegerField(
+    third_party_user_id = models.CharField(
         _('third party user_id'),
+        max_length=32,
         unique=True,
         blank=True,
         null=True,
@@ -141,6 +142,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
+        unique_together = ('register_type', 'third_party_user_id')
 
     def clean(self):
         super().clean()

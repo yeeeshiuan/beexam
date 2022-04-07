@@ -301,6 +301,84 @@ def fbAuthCallback(request):
         'main/index.html',
         {
             'loadingMessage':json.dumps(message),
-            'facebookId': env('FACEBOOK_APP_ID')
+            'facebookId': env('FACEBOOK_APP_ID'),
+            'googleId': env('GOOGLE_APP_ID')
+        }
+    )
+
+
+def googleAuthCallback(request):
+    code = request.GET.get('code')
+
+    # POST google for getting id_token
+    accessTokenAPIUrl = env('GOOGLE_ACCESS_TOKEN_API_URL')
+    params = {
+        "client_id": env('GOOGLE_APP_ID'),
+        "client_secret": env('GOOGLE_APP_SECRET'),
+        "redirect_uri": env('GOOGLE_REDIRECT_URL'),
+        "code": code,
+        "grant_type": "authorization_code"
+    }
+    data = urllib.parse.urlencode(params)
+    data = data.encode('ascii')
+    req = urllib.request.Request(accessTokenAPIUrl, data)
+    with urllib.request.urlopen(req) as response:
+        res = response.read()
+    accessTokenResData = json.loads(res)
+
+    # GET google user data
+    userDataAPIUrl = env('GOOGLE_USER_API_URL')
+    params = {
+        "id_token": accessTokenResData['id_token']
+    }
+    data = urllib.parse.urlencode(params)
+    data = data.encode('ascii')
+    req = urllib.request.Request(userDataAPIUrl, data)
+    with urllib.request.urlopen(req) as response:
+        res = response.read()
+    userDataResData = json.loads(res)
+
+    # check if the user is exist
+    user = authenticate(
+        request=request,
+        email=userDataResData['email'],
+        third_party_user_id=userDataResData['sub'],
+        register_type=RegisterType.GOOGLE.value,
+    )
+
+    message = {'success': 'Welcome Back!'}
+    if user is None:
+        message = {'success': 'Register Successful!'}
+        try:
+            with transaction.atomic():
+                user = User.objects.create(email=userDataResData['email'])
+                user.set_password('@'+userDataResData['sub']+'@')
+                user.username = userDataResData['name']
+                user.third_party_user_id = userDataResData['sub']
+                user.register_type = RegisterType.GOOGLE
+                user.is_verified = True
+                user.save()
+
+                user = authenticate(
+                    request=request,
+                    email=userDataResData['email'],
+                    third_party_user_id=userDataResData['sub'],
+                    register_type=RegisterType.GOOGLE.value,
+                )
+                login(request, user)
+
+        except Exception as e:
+            print(e)
+            message = {'danger': 'Something went wrong in the server side!'}
+    else:
+        login(request, user)
+
+    return render(
+        request,
+        'main/index.html',
+        {
+            'loadingMessage':json.dumps(message),
+            'facebookId': env('FACEBOOK_APP_ID'),
+            'googleId': env('GOOGLE_APP_ID')
         }
     )

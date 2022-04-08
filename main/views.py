@@ -14,8 +14,8 @@ def index(request):
         }
     )
 
-def privacyPolicies(request):
-    return render(request, 'main/privacyPolicies.html')
+def privacy_policies(request):
+    return render(request, 'main/privacy-policies.html')
 
 @login_required(login_url='/')
 def dashboard(request):

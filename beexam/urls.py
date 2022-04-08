@@ -12,17 +12,17 @@ urlpatterns = [
     path('', main_views.index, name='index'),
     path('dashboard/', main_views.dashboard, name='dashboard'),
     path('profile/', main_views.profile, name='profile'),
-    path('privacypolicies/', main_views.privacyPolicies, name="privacyPolicies"),
+    path('privacy-policies/', main_views.privacy_policies, name="privacy_policies"),
     path(
         'activate/<uidb64>/<token>/',
         member_views.activate,
         name='activate'
     ),
-    path('post-login/', member_views.postLogin, name="login"),
-    path('resend-activate-email/', member_views.resendActivateEmail, name="resendActivateEmail"),
-    path('post-logout/', member_views.postLogout, name="logout"),
-    path('fb-auth-callback/', member_views.fbAuthCallback, name="fbAuth"),
-    path('google-auth-callback/', member_views.googleAuthCallback, name="googleAuth"),
+    path('post-login/', member_views.post_login, name="login"),
+    path('resend-activate-email/', member_views.resend_activate_email, name="resend_activate_email"),
+    path('post-logout/', member_views.post_logout, name="logout"),
+    path('fb-auth-callback/', member_views.fb_auth_callback, name="fb_auth_callback"),
+    path('google-auth-callback/', member_views.google_auth_callback, name="google_auth_callback"),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

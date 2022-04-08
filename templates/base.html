@@ -126,12 +126,12 @@
                                 <hr class="my-4">
                                 <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4"
-                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fbAuth'%}&state={{ csrf_token }}">
+                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fb_auth_callback'%}&state={{ csrf_token }}">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Sign up with Facebook
                                 </a>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4"
-                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'googleAuth'%}&client_id={{ googleId }}&nonce=5566">
+                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'google_auth_callback'%}&client_id={{ googleId }}&nonce=5566">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                                     Sign up with Google
                                 </a>
@@ -172,12 +172,12 @@
                                 <hr class="my-4">
                                 <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4"
-                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fbAuth'%}&state={{ csrf_token }}">
+                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fb_auth_callback'%}&state={{ csrf_token }}">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Login with Facebook
                                 </a>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4"
-                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'googleAuth'%}&client_id={{ googleId }}&nonce=5566">
+                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'google_auth_callback'%}&client_id={{ googleId }}&nonce=5566">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                                     Login with Google
                                 </a>
@@ -187,7 +187,6 @@
                 </div>
             </div>
 
-            <div id="fb-root"></div>
             <footer class="mt-auto text-white-50">
                 <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
             </footer>

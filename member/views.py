@@ -58,7 +58,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     uid = urlsafe_base64_encode(force_bytes(user.pk))
                     token = account_activation_token.make_token(user)
                     body_html = render_to_string(
-                        'member/email/activateAccount.html',
+                        'member/email/activate-account.html',
                         {
                             'project_name': settings.PROJECT_NAME,
                             'activate_url': request.build_absolute_uri(
@@ -168,7 +168,7 @@ def activate(request, uidb64, token):
     return render(request, 'main/index.html', {'loadingMessage': json.dumps(message)})
 
 
-def postLogin(request):
+def post_login(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
 
@@ -187,7 +187,7 @@ def postLogin(request):
 
 
 @login_required
-def resendActivateEmail(request):
+def resend_activate_email(request):
     success = False
     errors = {'message': ['The user is not login.']}
 
@@ -196,7 +196,7 @@ def resendActivateEmail(request):
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = account_activation_token.make_token(user)
         body_html = render_to_string(
-            'member/email/activateAccount.html',
+            'member/email/activate-account.html',
             {
                 'project_name': settings.PROJECT_NAME,
                 'activate_url': request.build_absolute_uri(
@@ -226,12 +226,12 @@ def resendActivateEmail(request):
 
 
 @login_required
-def postLogout(request):
+def post_logout(request):
     logout(request)
     return JsonResponse({'success': True})
 
 
-def fbAuthCallback(request):
+def fb_auth_callback(request):
     code = request.GET.get('code')
 
     # GET facebook short-term access_token
@@ -307,7 +307,7 @@ def fbAuthCallback(request):
     )
 
 
-def googleAuthCallback(request):
+def google_auth_callback(request):
     code = request.GET.get('code')
 
     # POST google for getting id_token

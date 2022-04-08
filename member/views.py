@@ -165,7 +165,15 @@ def activate(request, uidb64, token):
             message = {'success': 'Your account is verified! Please login.'}
     else:
         message = {'danger': 'The activated code is invalid.'}
-    return render(request, 'main/index.html', {'loadingMessage': json.dumps(message)})
+    return render(
+        request,
+        'main/index.html',
+        {
+            'loading_message': json.dumps(message),
+            'facebook_id': env('FACEBOOK_APP_ID'),
+            'google_id': env('GOOGLE_APP_ID')
+        }
+    )
 
 
 def post_login(request):
@@ -300,9 +308,9 @@ def fb_auth_callback(request):
         request,
         'main/index.html',
         {
-            'loadingMessage':json.dumps(message),
-            'facebookId': env('FACEBOOK_APP_ID'),
-            'googleId': env('GOOGLE_APP_ID')
+            'loading_message':json.dumps(message),
+            'facebook_id': env('FACEBOOK_APP_ID'),
+            'google_id': env('GOOGLE_APP_ID')
         }
     )
 
@@ -377,8 +385,8 @@ def google_auth_callback(request):
         request,
         'main/index.html',
         {
-            'loadingMessage':json.dumps(message),
-            'facebookId': env('FACEBOOK_APP_ID'),
-            'googleId': env('GOOGLE_APP_ID')
+            'loading_message':json.dumps(message),
+            'facebook_id': env('FACEBOOK_APP_ID'),
+            'google_id': env('GOOGLE_APP_ID')
         }
     )

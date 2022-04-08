@@ -126,12 +126,12 @@
                                 <hr class="my-4">
                                 <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4"
-                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fb_auth_callback'%}&state={{ csrf_token }}">
+                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebook_id }}&redirect_uri=https://{{ request.get_host }}{% url 'fb_auth_callback'%}&state={{ csrf_token }}">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Sign up with Facebook
                                 </a>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4"
-                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'google_auth_callback'%}&client_id={{ googleId }}&nonce=5566">
+                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'google_auth_callback'%}&client_id={{ google_id }}&nonce=5566">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                                     Sign up with Google
                                 </a>
@@ -172,12 +172,12 @@
                                 <hr class="my-4">
                                 <h2 class="fs-5 fw-bold mb-3 text-secondary">Or use a third-party</h2>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4"
-                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebookId }}&redirect_uri=https://{{ request.get_host }}{% url 'fb_auth_callback'%}&state={{ csrf_token }}">
+                                   href="https://www.facebook.com/v13.0/dialog/oauth?client_id={{ facebook_id }}&redirect_uri=https://{{ request.get_host }}{% url 'fb_auth_callback'%}&state={{ csrf_token }}">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
                                     Login with Facebook
                                 </a>
                                 <a class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-4"
-                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'google_auth_callback'%}&client_id={{ googleId }}&nonce=5566">
+                                   href="https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile+openid+email&response_type=code&state={{ csrf_token }}&redirect_uri=https://{{ request.get_host }}{% url 'google_auth_callback'%}&client_id={{ google_id }}&nonce=5566">
                                     <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                                     Login with Google
                                 </a>
@@ -192,12 +192,11 @@
             </footer>
         </div>
 
-        <input type="hidden" id="first-loading-message" data-message="{{ loadingMessage }}"/>
+        <input type="hidden" id="first-loading-message" data-message="{{ loading_message }}"/>
         {% if user.is_authenticated %}
             <input type="hidden" id="pk-url" data-url="{% url "user-detail" user.pk %}" />
         {% endif %}
         <input type="hidden" id="current-page" data-url="{{ request.build_absolute_uri }}"/>
-        <input type="hidden" id="facebook-id" data-key="{{ facebookId }}"/>
 
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>

@@ -1,8 +1,10 @@
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
 from member import views as member_views
 from main import views as main_views
 
+schema_view = get_swagger_view(title='BE-Exam API')
 router = routers.DefaultRouter()
 router.register(r'users', member_views.UserViewSet)
 
@@ -24,5 +26,6 @@ urlpatterns = [
     path('fb-auth-callback/', member_views.fb_auth_callback, name="fb_auth_callback"),
     path('google-auth-callback/', member_views.google_auth_callback, name="google_auth_callback"),
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('swagger/', schema_view)
 ]

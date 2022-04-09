@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
@@ -163,6 +163,7 @@ def activate(request, uidb64, token):
             message = {'success': 'Your account is verified! Please login.'}
     else:
         message = {'danger': 'The activated code is invalid.'}
+
     return render(
         request,
         'main/index.html',
@@ -181,7 +182,7 @@ def post_login(request):
     user = authenticate(request, username=email, password=password)
     if user is not None:
         login(request, user)
-        return JsonResponse({'success': True, 'url': reverse('index')})
+        return JsonResponse({'success': True})
     else:
         data = {
             'success': False,

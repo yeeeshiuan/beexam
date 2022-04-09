@@ -196,7 +196,8 @@
         {% if user.is_authenticated %}
             <input type="hidden" id="pk-url" data-url="{% url "user-detail" user.pk %}" />
         {% endif %}
-        <input type="hidden" id="current-page" data-url="{{ request.build_absolute_uri }}"/>
+        <input type="hidden" id="current-page" data-url="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ request.path }}"/>
+        <input type="hidden" id="dashboard-page" data-url="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{% url 'dashboard'%}"/>
 
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>

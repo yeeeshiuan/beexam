@@ -156,8 +156,8 @@ function post_login(e){
                 );
                 $("#success-alert").fadeTo(4000, 500).slideUp(500, function(){
                     $("#success-alert").slideUp(6000, function(){
-                        const currentUrl = $('#current-page').attr("data-url");
-                        window.location.href = currentUrl;
+                        const dashboardUrl = $('#dashboard-page').attr("data-url");
+                        window.location.href = dashboardUrl;
                     });
                     $("#success-alert").html('');
                     $("#success-alert").hide();
@@ -346,7 +346,7 @@ function resend_activate_email(e){
         data:{},
         headers:{"X-CSRFToken": crf_token},
         success:function(data){
-            $('#resend-activate-email-button').html('Update')
+            $('#resend-activate-email-button').html('Resend Email Verification')
                                               .attr('disabled', false);
 
             console.log(data);
